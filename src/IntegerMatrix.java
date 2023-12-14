@@ -1,19 +1,22 @@
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.function.Consumer;
 
-public class IntegerMatrix implements Matrix<Integer> {
+public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
+
+    private final Integer[][] matrix;
 
     public static void main(String[] args){
         //test
         IntegerMatrix testMatrix = new IntegerMatrix(3,3);
-        System.out.println(testMatrix.rows()+" "+testMatrix.columns());
         System.out.println(testMatrix);
+        System.out.println(Arrays.toString(testMatrix.getColumn(2)));
     }
-
-    private Integer[][] matrix;
 
     public IntegerMatrix(int rows, int columns){
         matrix = new Integer[rows][columns];
-        init();
+        initRandom();
     }
 
     //calc
@@ -49,20 +52,33 @@ public class IntegerMatrix implements Matrix<Integer> {
         }
     }
 
+    public void initRandom(){
+        Random rng = new Random();
+        for(int i = 0; i < matrix.length; i++){
+            for (int j = 0; j < matrix[0].length; j++){
+                matrix[i][j] = rng.nextInt(100);
+            }
+        }
+    }
+
     //getter
     @Override
     public Integer[] getRow(int row) {
-        return new Integer[0];
+        return (matrix[row]);
     }
 
     @Override
     public Integer[] getColumn(int column) {
-        return new Integer[0];
+        Integer[] out = new Integer[columns()];
+        for (int i = 0; i < columns(); i++){
+            out[i] = matrix[i][column];
+        }
+        return out;
     }
 
     @Override
     public Integer get(int row, int column) {
-        return 0;
+        return matrix[row][column];
     }
 
     @Override
@@ -82,7 +98,7 @@ public class IntegerMatrix implements Matrix<Integer> {
 
     @Override
     public void set(int row, int column, Integer input) {
-
+        matrix[row][column] = input;
     }
 
     //setter
@@ -109,8 +125,9 @@ public class IntegerMatrix implements Matrix<Integer> {
             for(int j = 0; j < matrix[0].length; j++){
                 out = out.concat("|"+matrix[i][j]);
             }
-            out = out.concat("\n");
+            out = out.concat("|\n");
         }
         return out;
     }
+
 }
