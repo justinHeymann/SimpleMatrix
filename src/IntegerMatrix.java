@@ -2,25 +2,33 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
 
     private final Integer[][] matrix;
     private MatrixMultiplicationStrategy<Integer> multiplicationStrategy = new SimpleMatrixMultiplication();
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IllegalMatrixException {
         //test
-        IntegerMatrix testMatrix1 = new IntegerMatrix(3,3);
-        IntegerMatrix testMatrix2 = new IntegerMatrix(3,3);
-        System.out.println(testMatrix1+"\n"+testMatrix2);
-        System.out.println(testMatrix1.multiply(testMatrix2));
+        IntegerMatrix testMatrix1 = new IntegerMatrix(3,4);
+        System.out.println(testMatrix1);
+        System.out.println(Arrays.toString(testMatrix1.getColumn(1)) +" "+ Arrays.toString(testMatrix1.getRow(1)));
+        System.out.println(IntegerMatrix.transpose(testMatrix1));
     }
 
+    public IntegerMatrix(int rows, int columns, Integer defaultValue){
+        matrix = new Integer[rows][columns];
+        init(defaultValue);
+
+    }
     public IntegerMatrix(int rows, int columns){
         matrix = new Integer[rows][columns];
         initRandom();
 
+    }
+
+    public IntegerMatrix(int length){
+        this(length, length);
     }
 
     /**
@@ -36,6 +44,28 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
             }
         }
     }
+
+    //static
+    public static IntegerMatrix unitMatrix(int length) throws IllegalMatrixException {
+        if (length < 1){
+            throw new IllegalMatrixException("No integer matrix of length: "+length, null);
+        }
+        IntegerMatrix matrix = new IntegerMatrix(length);
+        matrix.init(0);
+        for (int i = 0; i < length; i++){
+            matrix.set(i,i, 1);
+        }
+        return matrix;
+    }
+
+    /* still buggy, not finished
+    public static IntegerMatrix transpose(IntegerMatrix matrix) throws IllegalMatrixException {
+        IntegerMatrix out = new IntegerMatrix(matrix.columns(), matrix.rows(), 0);
+        for (int i = 0; i < matrix.columns(); i++){
+            out.setRow(i, matrix.getRow(i));
+        }
+        return out;
+    }*/
 
     //calc
     public IntegerMatrix add(int n){
@@ -81,15 +111,15 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
     }
 
     //private
-    private void init(){
+    private void init(Integer integer){
         for(int i = 0; i < matrix.length; i++){
             for (int j = 0; j < matrix[0].length; j++){
-                matrix[i][j] = null;
+                matrix[i][j] = integer;
             }
         }
     }
 
-    public void initRandom(){
+    private void initRandom(){
         Random rng = new Random();
         for(int i = 0; i < matrix.length; i++){
             for (int j = 0; j < matrix[0].length; j++){
@@ -101,13 +131,17 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
     //getter
     @Override
     public Integer[] getRow(int row) {
-        return (matrix[row]);
+        Integer[] out = new Integer[columns()];
+        for (int i = 0; i < columns(); i++){
+            out[i] = matrix[row][i];
+        }
+        return out;
     }
 
     @Override
     public Integer[] getColumn(int column) {
-        Integer[] out = new Integer[columns()];
-        for (int i = 0; i < columns(); i++){
+        Integer[] out = new Integer[rows()];
+        for (int i = 0; i < rows(); i++){
             out[i] = matrix[i][column];
         }
         return out;
@@ -144,6 +178,10 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
         return count;
     }
 
+    public boolean isQuadratic(){
+        return rows() == columns();
+    }
+
     public MatrixMultiplicationStrategy<Integer> getMultiplicationStrategy() {
         return multiplicationStrategy;
     }
@@ -155,13 +193,23 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
     }
 
     @Override
-    public void setRow(int row, Integer[] inputs) {
-
+    public void setRow(int row, Integer[] inputs) throws IllegalMatrixException {
+        if (inputs.length != rows()){
+            throw new IllegalMatrixException(inputs.length+" does not match row length: "+rows(),this);
+        }
+        for (int i = 0; i < rows(); i++){
+            set(row, i, inputs[i]);
+        }
     }
 
     @Override
-    public void setColumn(int column, Integer[] inputs) {
-
+    public void setColumn(int column, Integer[] inputs) throws IllegalMatrixException {
+        if (inputs.length != columns()){
+            throw new IllegalMatrixException(inputs.length+" does not match column length: "+columns(),this);
+        }
+        for (int i = 0; i < columns(); i++){
+            set(i, column, inputs[i]);
+        }
     }
 
     //helper

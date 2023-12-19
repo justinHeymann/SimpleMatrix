@@ -22,8 +22,8 @@
 
     //setter
      void set(int row, int column, C input);
-     void setRow(int row, C[] inputs);
-     void setColumn(int column, C[] inputs);
+     void setRow(int row, C[] inputs) throws IllegalMatrixException ;
+     void setColumn(int column, C[] inputs) throws IllegalMatrixException ;
 
      //helper
     String toString();
