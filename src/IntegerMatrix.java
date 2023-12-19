@@ -1,39 +1,75 @@
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
 
 public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
 
     private final Integer[][] matrix;
+    private MatrixMultiplicationStrategy<Integer> multiplicationStrategy = new SimpleMatrixMultiplication();
 
     public static void main(String[] args){
         //test
-        IntegerMatrix testMatrix = new IntegerMatrix(3,3);
-        System.out.println(testMatrix);
-        System.out.println(Arrays.toString(testMatrix.getColumn(2)));
+        IntegerMatrix testMatrix1 = new IntegerMatrix(3,3);
+        IntegerMatrix testMatrix2 = new IntegerMatrix(3,3);
+        System.out.println(testMatrix1+"\n"+testMatrix2);
+        System.out.println(testMatrix1.multiply(testMatrix2));
     }
 
     public IntegerMatrix(int rows, int columns){
         matrix = new Integer[rows][columns];
         initRandom();
+
+    }
+
+    /**
+     * copy constructor
+     * @param input reference of copy
+     */
+    public IntegerMatrix(IntegerMatrix input){
+        matrix = new Integer[input.rows()][input.columns()];
+        multiplicationStrategy = input.getMultiplicationStrategy();
+        for (int i = 0; i < rows(); i++){
+            for (int j = 0; j < columns(); j++){
+                set(i, j, input.get(i, j));
+            }
+        }
     }
 
     //calc
-    public void add(int i){
-
+    public IntegerMatrix add(int n){
+        IntegerMatrix out = new IntegerMatrix(this);
+        for (int i = 0; i < rows(); i++){
+            for (int j = 0; j < columns(); j++){
+                out.set(i,j, get(i,j) + n);
+            }
+        }
+        return out;
     }
 
-    public void add(IntegerMatrix other){
-
+    public IntegerMatrix add(IntegerMatrix other){
+        IntegerMatrix out = new IntegerMatrix(this);
+        for (int i = 0; i < rows(); i++){
+            for (int j = 0; j < columns(); j++){
+                out.set(i,j, get(i,j) + get(i,j));
+            }
+        }
+        return out;
     }
 
-    public void scale(int i){
-
+    public IntegerMatrix scale(int s){
+        IntegerMatrix out = new IntegerMatrix(this);
+        for (int i = 0; i < rows(); i++){
+            for (int j = 0; j < columns(); j++){
+                out.set(i,j, get(i,j) * s);
+            }
+        }
+        return out;
     }
 
-    public void multiply(IntegerMatrix other){
-
+    public IntegerMatrix multiply(IntegerMatrix other){
+        return multiplicationStrategy.multiply(this, other);
     }
 
     public void gauss(){
@@ -43,6 +79,7 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
     public void det(){
 
     }
+
     //private
     private void init(){
         for(int i = 0; i < matrix.length; i++){
@@ -56,7 +93,7 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
         Random rng = new Random();
         for(int i = 0; i < matrix.length; i++){
             for (int j = 0; j < matrix[0].length; j++){
-                matrix[i][j] = rng.nextInt(100);
+                matrix[i][j] = rng.nextInt(10);
             }
         }
     }
@@ -93,18 +130,28 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
 
     @Override
     public int getSize() {
-        return 0;
+        return columns() * rows();
     }
 
     @Override
-    public void set(int row, int column, Integer input) {
-        matrix[row][column] = input;
+    public int getTrueSize() {
+        int count = 0;
+        for (Integer i: this) {
+            if (Objects.nonNull(i)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public MatrixMultiplicationStrategy<Integer> getMultiplicationStrategy() {
+        return multiplicationStrategy;
     }
 
     //setter
     @Override
-    public int getTrueSize() {
-        return 0;
+    public void set(int row, int column, Integer input) {
+        matrix[row][column] = input;
     }
 
     @Override
@@ -130,4 +177,8 @@ public class IntegerMatrix implements Matrix<Integer>, Iterable<Integer>{
         return out;
     }
 
+    @Override
+    public Iterator<Integer> iterator() {
+        return new Array2DIterator(matrix);
+    }
 }
