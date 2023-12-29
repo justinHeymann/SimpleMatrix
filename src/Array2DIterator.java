@@ -1,12 +1,12 @@
 import java.util.Iterator;
 
-public class Array2DIterator implements Iterator<Integer> {
-    private final Integer[][] array;
+public class Array2DIterator implements Iterator<Number> {
+    private final Number[][] array;
     private int row = 0;
     private int column = 0;
 
-    public Array2DIterator(Integer[][] array) {
-        if (array.length == 0 || array[0].length == 0){
+    public Array2DIterator(Number[][] array) {
+        if (array.length == 0 || array[0].length == 0) {
             throw new IllegalArgumentException("Unable to create Iterator for empty matrix");
         }
         this.array = array;
@@ -18,14 +18,14 @@ public class Array2DIterator implements Iterator<Integer> {
     }
 
     @Override
-    public Integer next() {
-        Integer out = array[row][column];
-        if (!hasNext()){
+    public Number next() {
+        Number out = array[row][column];
+        if (!hasNext()) {
             throw new UnsupportedOperationException("Iterator has reached the end: no further elements");
         }
-        if (row < array.length){
+        if (row < array.length) {
             row++;
-        }else{
+        } else {
             row = 0;
             column++;
         }

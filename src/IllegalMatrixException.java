@@ -1,6 +1,7 @@
-public class IllegalMatrixException extends Exception{
-    private Matrix matrix;
-    public  IllegalMatrixException(String message, Matrix matrix){
+public class IllegalMatrixException extends Exception {
+    private final Matrix matrix;
+
+    public IllegalMatrixException(String message, Matrix matrix) {
         super(message);
         this.matrix = matrix;
     }
