@@ -1,3 +1,7 @@
+package Exception;
+
+import Matrices.Matrix;
+
 public class IllegalMatrixException extends Exception {
     private final Matrix matrix;
 

@@ -1,3 +1,7 @@
+package MatrixMath;
+
+import Matrices.Matrix;
+
 /**
  * Basic math functionality for number matrices.
  *

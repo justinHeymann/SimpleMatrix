@@ -1,6 +1,10 @@
+package Matrices;
+
+import Exception.IllegalMatrixException;
+
 /**
  * Provides basic function for all matrix structures
- * Not all functions might be available or overlap for a given implementation of Matrix
+ * Not all functions might be available or overlap for a given implementation of NumberMatrix.Matrix
  *
  * @param <C> placeholder for entries of matrix
  */

@@ -1,5 +1,10 @@
+package Matrices;
+
 import java.util.Iterator;
 import java.util.Objects;
+import Exception.IllegalMatrixException;
+
+import Iterator.Array2DIterator;
 
 /**
  * Abstract Template for all number matrices
@@ -19,7 +24,6 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
 
     /**
      * copy constructor
-     *
      * @param copy reference of copy
      */
     public NumberMatrix(NumberMatrix copy) {

@@ -1,3 +1,9 @@
+package Matrices;
+
+import MatrixMath.Multiplication.NumberMatrixMultiplicationStrategy;
+import MatrixMath.Multiplication.SimpleIntegerMatrixMultiplication;
+import Exception.IllegalMatrixException;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -30,7 +36,7 @@ public class IntegerMatrix extends NumberMatrix {
         System.out.println(Arrays.toString(testMatrix1.getColumn(1)) + " " + Arrays.toString(testMatrix1.getRow(1)));
         testMatrix1.setRow(1, new Integer[]{1, 2, 3, 4, 5, 6, 7});
         System.out.println(testMatrix1);
-        System.out.println(IntegerMatrix.unitMatrix(3));
+        System.out.println(testMatrix1.multiply(new IntegerMatrix(7,3)));
     }
 
     //static
@@ -45,10 +51,8 @@ public class IntegerMatrix extends NumberMatrix {
         return matrix;
     }
 
-    //integer
-
-    public boolean isZero() {
-        for (Number n : this) {
+    public static boolean isZero(IntegerMatrix matrix) {
+        for (Number n : matrix) {
             Integer i = (Integer) n;
             if (i != 0) {
                 return false;

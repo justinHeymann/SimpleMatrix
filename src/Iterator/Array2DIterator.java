@@ -1,3 +1,5 @@
+package Iterator;
+
 import java.util.Iterator;
 
 public class Array2DIterator implements Iterator<Number> {
