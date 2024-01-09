@@ -11,11 +11,12 @@ import MatrixMath.SimpleDoubleGauss;
 public class DoubleMatrix extends NumberMatrix {
 
     public static void main(String[] args) throws IllegalMatrixException {
-        DoubleMatrix double1 = new DoubleMatrix(2,3);
-        /*
-        double1.setRow(0, new Number[]{1.0, 2.0, 3.0, 4.0, 5.0});
-        double1.setRow(1, new Number[]{6.0, 7.0, 8.0, 9.0, 0.0});
-        */
+        DoubleMatrix double1 = new DoubleMatrix(3,7);
+
+        double1.setRow(0, new Number[]{-1.0, -3.0, 19.0, -5.0, -2.0, -40.0, 5.0});
+        double1.setRow(1, new Number[]{2.0, 7.0, -45.0, 12.0, 5.0, 96.0, -2.0});
+        double1.setRow(2, new Number[]{-3.0, -8.0, 50.0, -14.0, -7.0, -110.0, 10.0});
+
 
         System.out.println(double1);
         System.out.println(double1.gauss());

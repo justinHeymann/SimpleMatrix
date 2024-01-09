@@ -5,7 +5,7 @@ import Exception.IllegalMatrixException;
 
 /**
  * A simple gaussian elimination algorithm
- * rounding error can occur
+ * rounding errors can occur with double values
  */
 
 public class SimpleDoubleGauss implements GaussStrategy {
