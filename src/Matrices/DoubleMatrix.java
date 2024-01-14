@@ -11,11 +11,11 @@ import MatrixMath.SimpleDoubleGauss;
 public class DoubleMatrix extends NumberMatrix {
 
     public static void main(String[] args) throws IllegalMatrixException {
-        DoubleMatrix double1 = new DoubleMatrix(3,7);
+        DoubleMatrix double1 = new DoubleMatrix(3,6);
 
-        double1.setRow(0, new Number[]{-1.0, -3.0, 19.0, -5.0, -2.0, -40.0, 5.0});
-        double1.setRow(1, new Number[]{2.0, 7.0, -45.0, 12.0, 5.0, 96.0, -2.0});
-        double1.setRow(2, new Number[]{-3.0, -8.0, 50.0, -14.0, -7.0, -110.0, 10.0});
+        double1.setRow(0, new Number[]{6,0,4,1,0,0});
+        double1.setRow(1, new Number[]{3, 2, -2, 0,1,0});
+        double1.setRow(2, new Number[]{-2,-3,3,0,0,1});
 
 
         System.out.println(double1);
@@ -56,17 +56,6 @@ public class DoubleMatrix extends NumberMatrix {
             matrix.set(i, i, 1);
         }
         return matrix;
-    }
-
-    public static boolean isZero(DoubleMatrix matrix) {
-        for (Number n : matrix) {
-            Double d = (Double) n;
-            if (d != 0) {
-                return false;
-            }
-
-        }
-        return true;
     }
 
     //calc
@@ -119,5 +108,21 @@ public class DoubleMatrix extends NumberMatrix {
     //getter
     public NumberMatrixMultiplicationStrategy getMultiplicationStrategy() {
         return multiplicationStrategy;
+    }
+
+    @Override
+    public Class getType(){
+        return Double.class;
+    }
+
+    //NumberMatrix
+    @Override
+    public void set(int i, int j, Number value){
+        if (value.getClass() == Integer.class){
+            Integer integer = (Integer) value;
+            super.set(i, j, Double.valueOf(integer));
+        } else{
+            super.set(i, j, value);
+        }
     }
 }

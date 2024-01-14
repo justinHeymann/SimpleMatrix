@@ -51,17 +51,6 @@ public class IntegerMatrix extends NumberMatrix {
         return matrix;
     }
 
-    public static boolean isZero(IntegerMatrix matrix) {
-        for (Number n : matrix) {
-            Integer i = (Integer) n;
-            if (i != 0) {
-                return false;
-            }
-
-        }
-        return true;
-    }
-
     //calc
     public IntegerMatrix add(Integer n) {
         IntegerMatrix out = new IntegerMatrix(this);
@@ -101,10 +90,6 @@ public class IntegerMatrix extends NumberMatrix {
         return (IntegerMatrix) multiplicationStrategy.multiply(this, other);
     }
 
-    public IntegerMatrix gauss() {
-        return null;
-    }
-
     public IntegerMatrix det() {
         return null;
     }
@@ -124,4 +109,8 @@ public class IntegerMatrix extends NumberMatrix {
         return multiplicationStrategy;
     }
 
+    @Override
+    public Class getType(){
+        return Integer.class;
+    }
 }

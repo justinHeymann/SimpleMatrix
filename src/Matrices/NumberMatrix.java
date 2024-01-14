@@ -5,6 +5,7 @@ import java.util.Objects;
 import Exception.IllegalMatrixException;
 
 import Iterator.Array2DIterator;
+import Util.RationalFraction;
 
 /**
  * Abstract Template for all number matrices
@@ -17,7 +18,7 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
         matrix = new Number[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                matrix[i][j] = defaultValue;
+                set(i,j,defaultValue);
             }
         }
     }
@@ -35,16 +36,45 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
         }
     }
 
-    /* should ideally not be necessary
-    @Override
-    public Number[][] get2DArray(){
-        Number[][] out = new Number[rows()][columns()];
-        for (int i = 0; i < rows(); i++){
-            out[i] = Arrays.copyOf(matrix[i], matrix[i].length);
-        }
-        return out;
-    }*/
+    //static
+    public static boolean isZero(NumberMatrix input){
+        String className = input.getType().getSimpleName();
+        switch(className){
+            case "Integer": {
+                for(Number n: input){
+                    Integer i = (Integer) n;
+                    if(i != 0){
+                        return false;
+                    }
+                }
+                return true;
+            }
 
+            case "Double": {
+                for(Number n: input){
+                    Double d = (Double) n;
+                    if(d != 0){
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            case "RationalFractionMatrix": {
+                for(Number n: input){
+                    RationalFraction fraction = (RationalFraction) n;
+                    if(!fraction.isZero()){
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            default: throw new UnsupportedOperationException("Action not supported for given Matrix type: "+className);
+        }
+    }
+
+    //manipulate
     public IntegerMatrix transpose() throws IllegalMatrixException {
         IntegerMatrix out = new IntegerMatrix(columns(), rows(), 0);
         for (int i = 0; i < columns(); i++) {
@@ -99,6 +129,10 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
             }
         }
         return count;
+    }
+
+    public Class getType(){
+        return Number.class;
     }
 
     public boolean isQuadratic() {

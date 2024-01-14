@@ -91,6 +91,10 @@ public class RationalFraction extends Number implements Comparable<RationalFract
     public int getDivisor(){
         return divisor;
     }
+
+    public boolean isZero(){
+        return getDividend() == 0;
+    }
     
     
     //Object

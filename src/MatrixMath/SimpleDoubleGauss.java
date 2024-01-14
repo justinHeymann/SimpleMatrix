@@ -2,6 +2,7 @@ package MatrixMath;
 
 import Matrices.DoubleMatrix;
 import Exception.IllegalMatrixException;
+import Matrices.NumberMatrix;
 
 /**
  * A simple gaussian elimination algorithm
@@ -17,7 +18,7 @@ public class SimpleDoubleGauss implements GaussStrategy {
         currentMatrix = new DoubleMatrix(input);
 
         //check edge case
-        if (DoubleMatrix.isZero(input)){
+        if (NumberMatrix.isZero(input)){
             throw new IllegalArgumentException("Unable to use gaussian elimination on zero matrix");
         } else if (currentMatrix.columns() < 2 || currentMatrix.rows() < 2) {
             throw new IllegalArgumentException("Matrix is too small to use gaussian elimination");
