@@ -30,6 +30,6 @@ public class RationalFractionMatrix extends NumberMatrix{
     }
 
     public RationalFractionMatrix gauss(){
-
+        return null;
     }
 }
