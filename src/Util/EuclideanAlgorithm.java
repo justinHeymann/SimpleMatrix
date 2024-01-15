@@ -5,7 +5,7 @@ public class EuclideanAlgorithm {
     public int y;
 
     //simple recursive implementation of the Euclidean algorithm for gcd
-    public int gcd(int a, int b){
+    public long gcd(long a, long b){
         if(b == 0){
             return a;
         }

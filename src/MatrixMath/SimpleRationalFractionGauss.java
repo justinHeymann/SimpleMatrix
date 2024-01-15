@@ -1,21 +1,16 @@
 package MatrixMath;
 
-import Matrices.DoubleMatrix;
-import Exception.IllegalMatrixException;
+import Matrices.RationalFractionMatrix;
 import Matrices.NumberMatrix;
+import Exception.IllegalMatrixException;
+import Util.RationalFraction;
 
-/**
- * A simple gaussian elimination algorithm
- * rounding errors can occur with double values
- */
-
-public class SimpleDoubleGauss implements GaussStrategy {
-    private DoubleMatrix currentMatrix;
-
-    @Override
-    public DoubleMatrix gauss(DoubleMatrix input) {
+public class SimpleRationalFractionGauss {
+    private RationalFractionMatrix currentMatrix;
+    
+    public RationalFractionMatrix gauss(RationalFractionMatrix input) {
         //init
-        currentMatrix = new DoubleMatrix(input);
+        currentMatrix = new RationalFractionMatrix(input);
 
         //check edge case
         if (NumberMatrix.isZero(input)){
@@ -25,24 +20,28 @@ public class SimpleDoubleGauss implements GaussStrategy {
         }
 
         optimizeRows();
+        System.out.println("row optimization: \n"+currentMatrix);
 
         int row = 0;
         int column = 0;
 
         while (row < currentMatrix.rows() && column < currentMatrix.columns()){
-            Double entry = (Double) currentMatrix.get(row, column);
-            if (entry != 0){
-                if (entry != 1){
+            RationalFraction entry = (RationalFraction) currentMatrix.get(row, column);
+            if (!entry.isZero()){
+                if (entry.compareTo(new RationalFraction(1, 1)) != 0){
                     rowDivision(row, entry);
+                    System.out.println("row division:\n"+currentMatrix);
                 }
                 pivot(row, column);
+                System.out.println("pivot:\n"+currentMatrix);
+
                 optimizeRows();
+                System.out.println("row optimization: \n"+currentMatrix);
+
                 row++;
             }
             column++;
         }
-
-
 
         return currentMatrix;
     }
@@ -61,7 +60,8 @@ public class SimpleDoubleGauss implements GaussStrategy {
     private int leadingZeros(Number[] row){
         int zeroCount = 0;
         for (Number n : row){
-            if((Double) n == 0){
+            RationalFraction fraction = (RationalFraction) n;
+            if(fraction.isZero()){
                 zeroCount++;
             }else {
                 break;
@@ -80,11 +80,12 @@ public class SimpleDoubleGauss implements GaussStrategy {
         }
     }
 
-    private void rowDivision(int rowIndex, Double divisor){
+    private void rowDivision(int rowIndex, RationalFraction divisor){
         try{
             Number[] row = currentMatrix.getRow(rowIndex);
             for (int i = 0; i < row.length; i++){
-                row[i] = (Double) row[i] / divisor;
+                RationalFraction fraction = (RationalFraction) row[i];
+                row[i] = fraction.divide(divisor);
             }
             currentMatrix.setRow(rowIndex, row);
         }catch (IllegalMatrixException ex){
@@ -93,27 +94,30 @@ public class SimpleDoubleGauss implements GaussStrategy {
     }
 
     private void pivot(int row, int column){
-        assert ((Double) currentMatrix.get(row, column) == 1);
+        assert ((RationalFraction) currentMatrix.get(row, column)).compareTo(new RationalFraction(1,1)) == 0;
         for(int i = 0; i < currentMatrix.rows(); i++){
-            Double entry = (Double) currentMatrix.get(i, column);
-            if (entry != 0 && i != row){
-                Number[] multiplied = multiplyRow(row, entry * (-1));
+            RationalFraction entry = (RationalFraction) currentMatrix.get(i, column);
+            if (!entry.isZero() && i != row){
+                Number[] multiplied = multiplyRow(row, entry.multiply(-1));
                 addRow(i, multiplied);
             }
         }
     }
 
-    private Number[] multiplyRow(int rowIndex, Double multiplicity){
+    private Number[] multiplyRow(int rowIndex, RationalFraction multiplicity){
         Number[] row = currentMatrix.getRow(rowIndex);
         for (int i = 0; i < row.length; i++){
-            row[i] = (Double) row[i] * multiplicity;
+            RationalFraction entry = (RationalFraction) row[i];
+            row[i] = entry.multiply(multiplicity);
         }
         return row;
     }
     private void addRow(int row, Number[] additional){
         Number[] target = currentMatrix.getRow(row);
         for(int i = 0; i < target.length; i++){
-            target[i] = (Double) target[i] + (Double) additional[i];
+            RationalFraction a = (RationalFraction) target[i];
+            RationalFraction b = (RationalFraction) additional[i];
+            target[i] = a.add(b);
         }
         try {
             currentMatrix.setRow(row, target);

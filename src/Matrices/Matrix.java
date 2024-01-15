@@ -48,5 +48,6 @@ public interface Matrix<C> {
 
     boolean equals(Object o);
 
-
+    //returns class of C
+    Class getType();
 }

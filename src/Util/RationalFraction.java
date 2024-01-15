@@ -1,29 +1,44 @@
 package Util;
 
+import jdk.jfr.Unsigned;
+
 import java.util.Random;
 
 public class RationalFraction extends Number implements Comparable<RationalFraction>{
-    private final int dividend;
-    private final int divisor;
+    private final long dividend;
+    @Unsigned
+    private final long divisor;
+
     public static void main(String[] args){
-        RationalFraction test1 = new RationalFraction();
-        RationalFraction test2 = new RationalFraction();
+        RationalFraction test1 = new RationalFraction().shorten();
+        RationalFraction test2 = new RationalFraction().shorten();
 
         System.out.println(test1+" "+test2);
+        System.out.println("compare "+test1.doubleValue()+" to "+test2.doubleValue()+" : "+test1.compareTo(test2));
 
-        System.out.println(test1.add(test2).shorten());
-        System.out.println(test1.multiply(test2).shorten());
     }
 
-    public RationalFraction(int dividend, int divisor){
-        this.dividend = dividend;
-        this.divisor = divisor;
+    public RationalFraction(long dividend, long divisor) {
+        if (divisor == 0) {
+            throw new IllegalArgumentException("Divisor can not be 0: ");
+        } else if (divisor < 0) {
+            if (dividend < 0){
+                this.divisor = Math.abs(divisor);
+                this.dividend = Math.abs(dividend);
+            }else {
+                this.dividend = -dividend;
+                this.divisor = Math.abs(divisor);
+            }
+        }else{
+            this.divisor = divisor;
+            this.dividend = dividend;
+        }
     }
 
     public RationalFraction(){
         Random rng = new Random();
-        dividend = rng.nextInt(100);
-        divisor = rng.nextInt(100);
+        dividend = rng.nextInt(10);
+        divisor = rng.nextInt(10) +1;
     }
     
     public RationalFraction(RationalFraction copy){
@@ -33,28 +48,30 @@ public class RationalFraction extends Number implements Comparable<RationalFract
     //number
     @Override
     public int intValue() {
-        return dividend / divisor;
+        return (int) (getDividend() / getDivisor());
     }
 
     @Override
     public long longValue() {
-        return dividend / divisor;
+        return getDividend() / getDivisor();
     }
 
     @Override
     public float floatValue() {
-        return (float) dividend / divisor;
+        return (float) getDividend() / getDivisor();
     }
 
     @Override
     public double doubleValue() {
-        return (double) dividend / divisor;
+        return (double) getDividend() / getDivisor();
     }
     
     //calc 
     public RationalFraction shorten(){
-        int gcd = new EuclideanAlgorithm().gcd(getDividend(), getDivisor());
-
+        if (getDividend() == 0) {
+            return new RationalFraction(0, 1);
+        }
+        long gcd = new EuclideanAlgorithm().gcd(getDividend(), getDivisor());
         return new RationalFraction(getDividend() / gcd, getDivisor() / gcd);
     }
 
@@ -64,11 +81,7 @@ public class RationalFraction extends Number implements Comparable<RationalFract
             return new RationalFraction(this.getDividend() + other.getDividend(), this.getDivisor());
         }
 
-        int lcm = LeastCommonMultiple.lcm(this.getDivisor(), other.getDivisor());
-        int otherMultiple = lcm / other.getDivisor();
-        int thisMultiple = lcm / this.getDivisor();
-
-        return new RationalFraction(this.getDividend() * thisMultiple + other.getDividend() * otherMultiple, lcm);
+        return new RationalFraction(this.getDividend() * other.getDivisor() + this.getDivisor() * other.getDividend(), this.getDivisor() * other.getDivisor()).shorten();
     }
 
     public RationalFraction add(int i){
@@ -76,34 +89,44 @@ public class RationalFraction extends Number implements Comparable<RationalFract
     }
 
     public RationalFraction multiply(int i){
-        return new RationalFraction(getDividend() * i, getDivisor());
+
+        return new RationalFraction(getDividend() * i, getDivisor()).shorten();
     }
 
     public RationalFraction multiply(RationalFraction other){
-        return new RationalFraction(other.getDividend() * this.getDividend(), other.getDivisor() * this.getDivisor());
+        return new RationalFraction(other.getDividend() * this.getDividend(), other.getDivisor() * this.getDivisor()).shorten();
+    }
+
+    public RationalFraction divide(RationalFraction other){
+        return multiply(new RationalFraction(other.getDivisor(), other.getDividend()));
     }
     
     //getter
-    public int getDividend(){
+    public long getDividend(){
         return dividend;
     }
     
-    public int getDivisor(){
+    public long getDivisor(){
         return divisor;
     }
 
     public boolean isZero(){
         return getDividend() == 0;
     }
+
     
     
     //Object
     @Override
     public String toString(){
-        if (divisor == 1){
-            return ""+dividend;
+        if (getDivisor() == 1){
+            return ""+getDividend();
+        } else if (getDividend() == 0) {
+            return "0";
+        } else if (getDividend() == getDivisor()){
+            return "1";
         }
-        return dividend+"/"+divisor;
+        return getDividend()+"/"+getDivisor();
     }
 
     @Override
@@ -112,14 +135,20 @@ public class RationalFraction extends Number implements Comparable<RationalFract
             return false;
         }
 
-        RationalFraction otherShortened = new RationalFraction((RationalFraction) o).shorten();
-        RationalFraction thisShortened = new RationalFraction(this).shorten();
+        RationalFraction otherShortened = ((RationalFraction) o).shorten();
+        RationalFraction thisShortened = this.shorten();
 
         return (thisShortened.getDividend() == otherShortened.getDividend()) && (thisShortened.getDivisor() == otherShortened.getDivisor());
     }
 
     @Override
     public int compareTo(RationalFraction other) {
-        return (int) Math.round( (double) dividend/divisor - (double) other.getDividend()/other.getDivisor());
+        double difference = (double) getDividend() /getDivisor() - (double) other.getDividend() /other.getDivisor();
+        if (difference < 0.0 && difference> -1.0){
+            return -1;
+        } else if (difference > 0.0 && difference < 1) {
+            return 1;
+        }
+        return (int) difference;
     }
 }

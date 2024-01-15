@@ -1,24 +1,27 @@
 package Matrices;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Iterator;
 import java.util.Objects;
 import Exception.IllegalMatrixException;
+import Util.RationalFraction;
 
 import Iterator.Array2DIterator;
-import Util.RationalFraction;
 
 /**
  * Abstract Template for all number matrices
  * All indexes start at: 0
  */
-public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
+public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number>{
     private final Number[][] matrix;
+    private final PropertyChangeSupport change = new PropertyChangeSupport(this);
 
     public NumberMatrix(int rows, int columns, Number defaultValue) {
         matrix = new Number[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                set(i,j,defaultValue);
+                set(i, j, defaultValue);
             }
         }
     }
@@ -56,18 +59,18 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
                     if(d != 0){
                         return false;
                     }
-                    return true;
                 }
+                return true;
             }
 
-            case "RationalFractionMatrix": {
+            case "RationalFraction": {
                 for(Number n: input){
                     RationalFraction fraction = (RationalFraction) n;
                     if(!fraction.isZero()){
                         return false;
                     }
-                    return true;
                 }
+                return true;
             }
 
             default: throw new UnsupportedOperationException("Action not supported for given Matrix type: "+className);
@@ -131,10 +134,6 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
         return count;
     }
 
-    public Class getType(){
-        return Number.class;
-    }
-
     public boolean isQuadratic() {
         return rows() == columns();
     }
@@ -182,5 +181,20 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number> {
     @Override
     public Iterator<Number> iterator() {
         return new Array2DIterator(matrix);
+    }
+
+
+    //beans
+    public void addPropertyChangeListener(PropertyChangeListener listener){
+        change.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener){
+        change.removePropertyChangeListener(listener);
+    }
+
+    @Override
+    public Class<Number> getType() {
+        return Number.class;
     }
 }
