@@ -35,6 +35,10 @@ public class RationalFraction extends Number implements Comparable<RationalFract
         }
     }
 
+    public RationalFraction(long dividend){
+        this(dividend, 1);
+    }
+
     public RationalFraction(){
         Random rng = new Random();
         dividend = rng.nextInt(10);

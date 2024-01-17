@@ -1,12 +1,15 @@
 package Matrices;
 
 import MatrixMath.SimpleRationalFractionGauss;
+import MatrixMath.StepByStepSolution;
 import Util.RationalFraction;
 import Exception.IllegalMatrixException;
 
-import java.util.Random;
 
-public class RationalFractionMatrix extends NumberMatrix{
+public class RationalFractionMatrix extends NumberMatrix implements StepByStepSolution {
+    private String[] lastSolution;
+    private final SimpleRationalFractionGauss rationalFractionGauss = new SimpleRationalFractionGauss();
+
     public static void main(String[] args) throws IllegalMatrixException {
         RationalFractionMatrix test1 = new RationalFractionMatrix(2,4);
         RationalFractionMatrix edgeCase = new RationalFractionMatrix(3, 4);
@@ -30,7 +33,7 @@ public class RationalFractionMatrix extends NumberMatrix{
         initRandom();
     }
 
-    //shortens all fractions entries
+    //shortens all fraction entries
     public RationalFractionMatrix shorten(){
         RationalFractionMatrix out = new RationalFractionMatrix(this);
         for(int i = 0; i < rows(); i++){
@@ -44,7 +47,6 @@ public class RationalFractionMatrix extends NumberMatrix{
 
     //init random
     private void initRandom(){
-        Random rng = new Random();
         for(int i = 0; i < rows(); i++){
             for(int j = 0; j < columns(); j++){
                 set(i,j, new RationalFraction());
@@ -53,13 +55,19 @@ public class RationalFractionMatrix extends NumberMatrix{
     }
 
     public RationalFractionMatrix gauss(){
-        return new SimpleRationalFractionGauss().gauss(this).shorten();
+        RationalFractionMatrix out = rationalFractionGauss.gauss(this).shorten();
+        lastSolution = rationalFractionGauss.getSolution();
+        return out;
     }
 
     //calc
-
     @Override
     public Class getType() {
         return RationalFraction.class;
+    }
+
+    @Override
+    public String[] getSolution() {
+        return lastSolution;
     }
 }

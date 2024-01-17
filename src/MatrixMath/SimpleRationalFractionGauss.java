@@ -5,12 +5,16 @@ import Matrices.NumberMatrix;
 import Exception.IllegalMatrixException;
 import Util.RationalFraction;
 
-public class SimpleRationalFractionGauss {
+import java.util.ArrayList;
+
+public class SimpleRationalFractionGauss implements StepByStepSolution{
     private RationalFractionMatrix currentMatrix;
+    private ArrayList<String> stepByStepSolution;
     
     public RationalFractionMatrix gauss(RationalFractionMatrix input) {
         //init
         currentMatrix = new RationalFractionMatrix(input);
+        stepByStepSolution = new ArrayList<>();
 
         //check edge case
         if (NumberMatrix.isZero(input)){
@@ -19,8 +23,10 @@ public class SimpleRationalFractionGauss {
             throw new IllegalArgumentException("Matrix is too small to use gaussian elimination");
         }
 
+
         optimizeRows();
-        System.out.println("row optimization: \n"+currentMatrix);
+        //System.out.println("swap rows: \n"+currentMatrix);
+        addToSolution("swap rows: \n"+currentMatrix);
 
         int row = 0;
         int column = 0;
@@ -30,13 +36,15 @@ public class SimpleRationalFractionGauss {
             if (!entry.isZero()){
                 if (entry.compareTo(new RationalFraction(1, 1)) != 0){
                     rowDivision(row, entry);
-                    System.out.println("row division:\n"+currentMatrix);
+                    //System.out.println("row division:\n"+currentMatrix);
+                    addToSolution("row division:\n"+currentMatrix);
                 }
                 pivot(row, column);
-                System.out.println("pivot:\n"+currentMatrix);
+                //System.out.println("pivot element "+row+", "+column+" :\n"+currentMatrix);
+                addToSolution("pivot element "+row+", "+column+" :\n"+currentMatrix);
 
                 optimizeRows();
-                System.out.println("row optimization: \n"+currentMatrix);
+                //System.out.println("swap rows:\n"+currentMatrix);
 
                 row++;
             }
@@ -124,5 +132,16 @@ public class SimpleRationalFractionGauss {
         }catch (IllegalMatrixException ignored){
 
         }
+    }
+
+    private void addToSolution(String string){
+        if (!stepByStepSolution.contains(string)){
+            stepByStepSolution.add(string);
+        }
+    }
+
+    @Override
+    public String[] getSolution() {
+        return stepByStepSolution.toArray(String[]::new);
     }
 }

@@ -3,6 +3,7 @@ package GUI;
 import Matrices.DoubleMatrix;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class GUI extends JFrame {
     public static void main(String[] args){
@@ -11,9 +12,9 @@ public class GUI extends JFrame {
     public GUI(){
         super("Simple Matrix");
         this.setSize(1900, 600);
-
-        DoubleMatrix matrix = new DoubleMatrix(3,3);
-        this.add(new NumberMatrixPanel(matrix));
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+        this.add(new MatrixCreationPanel(), BorderLayout.NORTH);
 
         this.setVisible(true);
     }
