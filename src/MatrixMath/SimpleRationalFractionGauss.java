@@ -3,18 +3,21 @@ package MatrixMath;
 import Matrices.RationalFractionMatrix;
 import Matrices.NumberMatrix;
 import Exception.IllegalMatrixException;
+import MatrixMath.StepByStepSolution.CalculationStep;
+import MatrixMath.StepByStepSolution.ComprehensibleSolution;
+import MatrixMath.StepByStepSolution.StepByStepSolution;
 import Util.RationalFraction;
 
 import java.util.ArrayList;
 
-public class SimpleRationalFractionGauss implements StepByStepSolution{
+public class SimpleRationalFractionGauss implements ComprehensibleSolution {
     private RationalFractionMatrix currentMatrix;
-    private ArrayList<String> stepByStepSolution;
+    private StepByStepSolution solution;
     
     public RationalFractionMatrix gauss(RationalFractionMatrix input) {
         //init
         currentMatrix = new RationalFractionMatrix(input);
-        stepByStepSolution = new ArrayList<>();
+        solution = new StepByStepSolution();
 
         //check edge case
         if (NumberMatrix.isZero(input)){
@@ -26,7 +29,7 @@ public class SimpleRationalFractionGauss implements StepByStepSolution{
 
         optimizeRows();
         //System.out.println("swap rows: \n"+currentMatrix);
-        addToSolution("swap rows: \n"+currentMatrix);
+        solution.add("swap rows:", currentMatrix);
 
         int row = 0;
         int column = 0;
@@ -37,11 +40,11 @@ public class SimpleRationalFractionGauss implements StepByStepSolution{
                 if (entry.compareTo(new RationalFraction(1, 1)) != 0){
                     rowDivision(row, entry);
                     //System.out.println("row division:\n"+currentMatrix);
-                    addToSolution("row division:\n"+currentMatrix);
+                    solution.add("row division:", currentMatrix);
                 }
                 pivot(row, column);
                 //System.out.println("pivot element "+row+", "+column+" :\n"+currentMatrix);
-                addToSolution("pivot element "+row+", "+column+" :\n"+currentMatrix);
+                solution.add("pivot element "+row+", "+column+" :", currentMatrix);
 
                 optimizeRows();
                 //System.out.println("swap rows:\n"+currentMatrix);
@@ -134,14 +137,8 @@ public class SimpleRationalFractionGauss implements StepByStepSolution{
         }
     }
 
-    private void addToSolution(String string){
-        if (!stepByStepSolution.contains(string)){
-            stepByStepSolution.add(string);
-        }
-    }
-
     @Override
-    public String[] getSolution() {
-        return stepByStepSolution.toArray(String[]::new);
+    public StepByStepSolution getSolution() {
+        return solution;
     }
 }

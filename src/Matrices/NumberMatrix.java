@@ -177,6 +177,27 @@ public abstract class NumberMatrix implements Matrix<Number>, Iterable<Number>{
         return out;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if (o.getClass() != this.getClass()){
+            return false;
+        }
+
+        NumberMatrix other = (NumberMatrix) o;
+        if (rows() != other.rows() || columns() != other.columns()){
+            return false;
+        }
+
+        for(int i = 0; i < rows(); i++){
+            for (int j = 0; j < columns(); j++){
+                if (!Objects.equals(get(i, j), other.get(i, j))){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     //iterable
     @Override
     public Iterator<Number> iterator() {

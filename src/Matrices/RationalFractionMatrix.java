@@ -1,13 +1,17 @@
 package Matrices;
 
 import MatrixMath.SimpleRationalFractionGauss;
-import MatrixMath.StepByStepSolution;
+import MatrixMath.StepByStepSolution.CalculationStep;
+import MatrixMath.StepByStepSolution.ComprehensibleSolution;
+import MatrixMath.StepByStepSolution.StepByStepSolution;
 import Util.RationalFraction;
 import Exception.IllegalMatrixException;
 
+import java.util.Arrays;
 
-public class RationalFractionMatrix extends NumberMatrix implements StepByStepSolution {
-    private String[] lastSolution;
+
+public class RationalFractionMatrix extends NumberMatrix implements ComprehensibleSolution {
+    private StepByStepSolution lastSolution;
     private final SimpleRationalFractionGauss rationalFractionGauss = new SimpleRationalFractionGauss();
 
     public static void main(String[] args) throws IllegalMatrixException {
@@ -18,7 +22,8 @@ public class RationalFractionMatrix extends NumberMatrix implements StepByStepSo
         edgeCase.setRow(2, new Number[] {new RationalFraction(9,1), new RationalFraction(3,9), new RationalFraction(3,8), new RationalFraction(4,7)});
 
         System.out.println(test1.shorten());
-        System.out.println(test1.gauss().shorten());
+        test1.gauss();
+
     }
     public RationalFractionMatrix(int rows, int columns, Number defaultValue) {
         super(rows, columns, defaultValue);
@@ -67,7 +72,7 @@ public class RationalFractionMatrix extends NumberMatrix implements StepByStepSo
     }
 
     @Override
-    public String[] getSolution() {
+    public StepByStepSolution getSolution() {
         return lastSolution;
     }
 }

@@ -4,22 +4,26 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.Arrays;
 
-public class MatrixCreationPanel extends JPanel implements ChangeListener {
+public class MatrixCalculationPanel extends JPanel implements ChangeListener {
     private MatrixInputPanel inputPanel = new MatrixInputPanel(3, 3);
     private final JPanel bottomFlow = new JPanel(new FlowLayout());
     private final SpinnerNumberModel heightModel = new SpinnerNumberModel(3, 2, 10, 1);
     private final SpinnerNumberModel widthModel = new SpinnerNumberModel(3, 2, 10, 1);
 
-    public MatrixCreationPanel(){
+    public MatrixCalculationPanel(){
         this.setLayout(new BorderLayout());
         JPanel gridPanel = new JPanel(new GridLayout(2,1));
         this.add(gridPanel, BorderLayout.NORTH);
-
         JPanel topFlow = new JPanel(new FlowLayout());
-
         gridPanel.add(topFlow);
         gridPanel.add(bottomFlow);
+
+        JTextArea resultTextArea = new JTextArea("*result*");
+        resultTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(resultTextArea);
+        this.add(scrollPane, BorderLayout.CENTER);
 
         JLabel heightLabel = new JLabel("height:");
         JLabel widthLabel = new JLabel("width: ");
@@ -32,7 +36,8 @@ public class MatrixCreationPanel extends JPanel implements ChangeListener {
 
         JButton createButton = new JButton("gauss");
         createButton.addActionListener( a -> {
-            System.out.println(inputPanel.getMatrixFromInput());
+
+
         });
 
         topFlow.add(heightLabel);
