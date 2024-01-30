@@ -29,7 +29,7 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
 
         optimizeRows();
         //System.out.println("swap rows: \n"+currentMatrix);
-        solution.add("swap rows:", currentMatrix);
+        solution.add("swap rows:", new RationalFractionMatrix(currentMatrix));
 
         int row = 0;
         int column = 0;
@@ -40,11 +40,11 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
                 if (entry.compareTo(new RationalFraction(1, 1)) != 0){
                     rowDivision(row, entry);
                     //System.out.println("row division:\n"+currentMatrix);
-                    solution.add("row division:", currentMatrix);
+                    solution.add("row division:", new RationalFractionMatrix(currentMatrix));
                 }
                 pivot(row, column);
                 //System.out.println("pivot element "+row+", "+column+" :\n"+currentMatrix);
-                solution.add("pivot element "+row+", "+column+" :", currentMatrix);
+                solution.add("pivot element "+row+", "+column+" :", new RationalFractionMatrix(currentMatrix));
 
                 optimizeRows();
                 //System.out.println("swap rows:\n"+currentMatrix);
@@ -54,7 +54,7 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
             column++;
         }
 
-        return currentMatrix;
+        return currentMatrix.shorten();
     }
 
     private void optimizeRows(){

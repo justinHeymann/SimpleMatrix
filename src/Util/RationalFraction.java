@@ -1,5 +1,6 @@
 package Util;
 
+import GUI.MatrixSolutionPanel;
 import jdk.jfr.Unsigned;
 
 import java.util.Random;
@@ -122,13 +123,15 @@ public class RationalFraction extends Number implements Comparable<RationalFract
     
     //Object
     @Override
-    public String toString(){
-        if (getDivisor() == 1){
-            return ""+getDividend();
+    public String toString() {
+        if (getDivisor() == 1) {
+            return "" + getDividend();
         } else if (getDividend() == 0) {
             return "0";
-        } else if (getDividend() == getDivisor()){
+        } else if (getDividend() == getDivisor()) {
             return "1";
+        } else if (Math.abs(getDividend()) == getDivisor()){
+            return "-1";
         }
         return getDividend()+"/"+getDivisor();
     }

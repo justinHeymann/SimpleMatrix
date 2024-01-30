@@ -1,5 +1,8 @@
 package GUI;
 
+import Matrices.RationalFractionMatrix;
+import Util.RationalFraction;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,10 +22,9 @@ public class MatrixCalculationPanel extends JPanel implements ChangeListener {
         JPanel topFlow = new JPanel(new FlowLayout());
         gridPanel.add(topFlow);
         gridPanel.add(bottomFlow);
+        JPanel solutionPanel = new JPanel();
 
-        JTextArea resultTextArea = new JTextArea("*result*");
-        resultTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(resultTextArea);
+        JScrollPane scrollPane = new JScrollPane(solutionPanel);
         this.add(scrollPane, BorderLayout.CENTER);
 
         JLabel heightLabel = new JLabel("height:");
@@ -36,7 +38,12 @@ public class MatrixCalculationPanel extends JPanel implements ChangeListener {
 
         JButton createButton = new JButton("gauss");
         createButton.addActionListener( a -> {
-
+            RationalFractionMatrix fractionMatrix = new RationalFractionMatrix(inputPanel.getMatrixFromInput());
+            fractionMatrix.gauss();
+            solutionPanel.removeAll();
+            solutionPanel.add(new MatrixSolutionPanel(fractionMatrix.getSolution()));
+            this.revalidate();
+            this.repaint();
 
         });
 
