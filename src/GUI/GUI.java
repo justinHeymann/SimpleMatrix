@@ -17,8 +17,9 @@ public class GUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(wrapperPanel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         wrapperPanel.add(new MatrixCalculationPanel(), BorderLayout.NORTH);
-        this.add(scrollPane);
+        this.add(scrollPane, BorderLayout.CENTER);
 
+        //this.pack();
         this.setVisible(true);
     }
 }

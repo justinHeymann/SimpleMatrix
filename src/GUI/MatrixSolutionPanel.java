@@ -10,19 +10,22 @@ import java.awt.*;
 public class MatrixSolutionPanel extends JPanel {
     public MatrixSolutionPanel (StepByStepSolution solution){
         this.setLayout(new BorderLayout());
-        JPanel scrollableList = new JPanel();
-        BoxLayout boxLayout = new BoxLayout(scrollableList, BoxLayout.Y_AXIS);
-        scrollableList.setLayout(boxLayout);
-        JScrollPane scrollPane = new JScrollPane(scrollableList);
+        JPanel boxPanel = new JPanel();
+        BoxLayout boxLayout = new BoxLayout(boxPanel, BoxLayout.Y_AXIS);
+        boxPanel.setLayout(boxLayout);
+        JScrollPane scrollPane = new JScrollPane(boxPanel);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        JLabel headerLabel = new JLabel("Step by Step Solution");
-        headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        scrollableList.add(headerLabel);
+        JLabel headerLabel = new JLabel("Found a step-by-step solution with "+solution.getStepCount()+" steps.");
+        headerLabel.setAlignmentX(SwingConstants.LEFT);
+        boxPanel.add(headerLabel);
+
         for (CalculationStep step: solution){
-            scrollableList.add(Box.createVerticalStrut(20));
-            scrollableList.add(new CalculationStepPanel(step));
+            boxPanel.add(Box.createVerticalStrut(20));
+            boxPanel.add(new CalculationStepPanel(step));
         }
+
+        boxPanel.add(new CalculationStepPanel(solution.getFinalResult()));
 
         this.setVisible(true);
     }
