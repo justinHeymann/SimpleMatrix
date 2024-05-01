@@ -7,15 +7,20 @@ import java.awt.*;
 
 public class CalculationStepPanel extends JPanel {
     public CalculationStepPanel(CalculationStep step){
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setLayout(new BorderLayout());
 
-        JPanel wrapperPanel = new JPanel(new BorderLayout());
-        this.add(new JLabel(step.getIndex()+":"), BorderLayout.WEST);
-        this.add(Box.createHorizontalStrut(20));
-        this.add(wrapperPanel);
+        JLabel explanation = new JLabel(step.getExplanation());
+        explanation.setHorizontalAlignment(SwingConstants.LEFT);
+        this.add(explanation, BorderLayout.NORTH);
 
-        wrapperPanel.add(new NumberMatrixPanel(step.getInterimSolution()), BorderLayout.CENTER);
-        wrapperPanel.add(new JLabel(step.getExplanation()), BorderLayout.NORTH);
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.X_AXIS));
+        this.add(wrapperPanel, BorderLayout.CENTER);
+
+        wrapperPanel.add(new JLabel(step.getIndex()+":"));
+        wrapperPanel.add(Box.createHorizontalStrut(20));
+
+        wrapperPanel.add(new NumberMatrixPanel(step.getInterimSolution()));
 
 
         this.setVisible(true);

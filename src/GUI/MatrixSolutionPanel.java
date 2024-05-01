@@ -19,10 +19,11 @@ public class MatrixSolutionPanel extends JPanel {
         JLabel headerLabel = new JLabel("Found a step-by-step solution with "+solution.getStepCount()+" steps.");
         headerLabel.setAlignmentX(SwingConstants.LEFT);
         boxPanel.add(headerLabel);
+        boxPanel.add(Box.createVerticalStrut(30));
 
         for (CalculationStep step: solution){
-            boxPanel.add(Box.createVerticalStrut(20));
             boxPanel.add(new CalculationStepPanel(step));
+            boxPanel.add(Box.createVerticalStrut(25));
         }
 
         boxPanel.add(new CalculationStepPanel(solution.getFinalResult()));

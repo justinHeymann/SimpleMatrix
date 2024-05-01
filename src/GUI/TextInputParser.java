@@ -2,14 +2,12 @@ package GUI;
 
 import Util.RationalFraction;
 
-import java.util.Arrays;
-
 public class TextInputParser {
     public static RationalFraction stringToFraction(String text){
         if (text.isBlank()){
             throw new IllegalArgumentException("Can not parse empty string");
         }
-        if (!text.matches("[:space]*[0-9]+(/[0-9]*)?[:space]*")){
+        if (!text.matches("[:space]*-?[0-9]+(/[0-9]*)?[:space]*")){
             throw new IllegalArgumentException("String does not match the required form");
         }
         String[] fraction = text.split("/");

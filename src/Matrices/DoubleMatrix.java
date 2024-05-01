@@ -1,12 +1,12 @@
 package Matrices;
 
+import Exception.IllegalMatrixException;
 import MatrixMath.GaussStrategy;
 import MatrixMath.Multiplication.NumberMatrixMultiplicationStrategy;
 import MatrixMath.Multiplication.SimpleDoubleMatrixMultiplicationStrategy;
+import MatrixMath.SimpleDoubleGauss;
 
 import java.util.Random;
-import Exception.IllegalMatrixException;
-import MatrixMath.SimpleDoubleGauss;
 
 public class DoubleMatrix extends NumberMatrix {
 

@@ -1,7 +1,7 @@
 package MatrixMath;
 
-import Matrices.DoubleMatrix;
 import Exception.IllegalMatrixException;
+import Matrices.DoubleMatrix;
 import Matrices.NumberMatrix;
 
 /**

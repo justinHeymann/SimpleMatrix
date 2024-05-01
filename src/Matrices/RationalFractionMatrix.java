@@ -1,13 +1,10 @@
 package Matrices;
 
+import Exception.IllegalMatrixException;
 import MatrixMath.SimpleRationalFractionGauss;
-import MatrixMath.StepByStepSolution.CalculationStep;
 import MatrixMath.StepByStepSolution.ComprehensibleSolution;
 import MatrixMath.StepByStepSolution.StepByStepSolution;
 import Util.RationalFraction;
-import Exception.IllegalMatrixException;
-
-import java.util.Arrays;
 
 
 public class RationalFractionMatrix extends NumberMatrix implements ComprehensibleSolution {

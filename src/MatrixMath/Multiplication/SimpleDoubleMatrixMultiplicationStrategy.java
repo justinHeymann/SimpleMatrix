@@ -1,7 +1,7 @@
 package MatrixMath.Multiplication;
 
-import Matrices.NumberMatrix;
 import Matrices.DoubleMatrix;
+import Matrices.NumberMatrix;
 
 public class SimpleDoubleMatrixMultiplicationStrategy implements NumberMatrixMultiplicationStrategy {
 

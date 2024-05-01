@@ -1,13 +1,13 @@
 package Matrices;
 
+import Exception.IllegalMatrixException;
+import Iterator.Array2DIterator;
+import Util.RationalFraction;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Iterator;
 import java.util.Objects;
-import Exception.IllegalMatrixException;
-import Util.RationalFraction;
-
-import Iterator.Array2DIterator;
 
 /**
  * Abstract Template for all number matrices

@@ -1,14 +1,16 @@
 package MatrixMath;
 
-import Matrices.RationalFractionMatrix;
-import Matrices.NumberMatrix;
 import Exception.IllegalMatrixException;
-import MatrixMath.StepByStepSolution.CalculationStep;
+import Matrices.NumberMatrix;
+import Matrices.RationalFractionMatrix;
 import MatrixMath.StepByStepSolution.ComprehensibleSolution;
 import MatrixMath.StepByStepSolution.StepByStepSolution;
 import Util.RationalFraction;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SimpleRationalFractionGauss implements ComprehensibleSolution {
     private RationalFractionMatrix currentMatrix;
@@ -29,7 +31,7 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
 
         optimizeRows();
         //System.out.println("swap rows: \n"+currentMatrix);
-        solution.add("swap rows:", new RationalFractionMatrix(currentMatrix));
+
 
         int row = 0;
         int column = 0;
@@ -40,12 +42,9 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
                 if (entry.compareTo(new RationalFraction(1, 1)) != 0){
                     rowDivision(row, entry);
                     //System.out.println("row division:\n"+currentMatrix);
-                    solution.add("row division:", new RationalFractionMatrix(currentMatrix));
                 }
                 pivot(row, column);
                 //System.out.println("pivot element "+row+", "+column+" :\n"+currentMatrix);
-                solution.add("pivot element "+row+", "+column+" :", new RationalFractionMatrix(currentMatrix));
-
                 optimizeRows();
                 //System.out.println("swap rows:\n"+currentMatrix);
 
@@ -57,16 +56,29 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
         return currentMatrix.shorten();
     }
 
-    private void optimizeRows(){
-        for (int i = 0; i < currentMatrix.rows() -1 ; i++){
-            int currentZeros = leadingZeros(currentMatrix.getRow(i));
-            int nextZeros = leadingZeros(currentMatrix.getRow(i + 1));
-            if (currentZeros > nextZeros){
-                switchRows(i, i + 1);
-                i = 0;
+    private void optimizeRows() {
+        HashMap<Integer, Integer> rowsZerosMap = new HashMap<>(currentMatrix.rows());
+
+        for (int i = 0; i < currentMatrix.rows(); i++){
+            rowsZerosMap.put(i, leadingZeros(currentMatrix.getRow(i)));
+        }
+
+        List<Integer> correctOrder = rowsZerosMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).map(Map.Entry::getKey).collect(Collectors.toList());
+
+        RationalFractionMatrix temp = new RationalFractionMatrix(currentMatrix);
+        for (int i = 0; i < currentMatrix.rows(); i++){
+            try {
+                temp.setRow(i, currentMatrix.getRow(correctOrder.get(i)));
+            }catch (IllegalMatrixException e){
+                e.printStackTrace();
             }
         }
+        currentMatrix = temp;
+
+        solution.add("Swapped rows: ", new RationalFractionMatrix(currentMatrix));
     }
+
+
 
     private int leadingZeros(Number[] row){
         int zeroCount = 0;
@@ -86,6 +98,8 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
             Number[] tempRow = currentMatrix.getRow(rowA);
             currentMatrix.setRow(rowA, currentMatrix.getRow(rowB));
             currentMatrix.setRow(rowB, tempRow);
+
+            solution.add("swap row "+(rowA + 1)+" and "+(rowB + 1)+":", new RationalFractionMatrix(currentMatrix));
         }catch (IllegalMatrixException ex){
             System.err.println("An unexpected error occurred during gaussian elimination: "+ex);
         }
@@ -99,6 +113,7 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
                 row[i] = fraction.divide(divisor);
             }
             currentMatrix.setRow(rowIndex, row);
+            solution.add("divide row "+(rowIndex + 1)+":", new RationalFractionMatrix(currentMatrix));
         }catch (IllegalMatrixException ex){
             System.out.println("An unexpected error occurred while dividing rows: "+ex);
         }
@@ -113,6 +128,8 @@ public class SimpleRationalFractionGauss implements ComprehensibleSolution {
                 addRow(i, multiplied);
             }
         }
+
+        solution.add("pivot element "+(row +1)+", "+(column + 1)+":", new RationalFractionMatrix(currentMatrix));
     }
 
     private Number[] multiplyRow(int rowIndex, RationalFraction multiplicity){

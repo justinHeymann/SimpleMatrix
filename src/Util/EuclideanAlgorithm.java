@@ -1,6 +1,10 @@
 package Util;
 
 public class EuclideanAlgorithm {
+    public static void main(String[] args){
+        EuclideanAlgorithm test = new EuclideanAlgorithm();
+        test.gcdExtended(15, 401);
+    }
     public int x;
     public int y;
 
@@ -35,6 +39,8 @@ public class EuclideanAlgorithm {
             temp = y;
             y = lasty - q * y;
             lasty = temp;
+
+            System.out.println(a+"\t"+b+"\t"+q+"\t"+r+"\t"+lasty+"\t"+lastx+"\t"+y+"\t"+x);
         }
 
         this.y = y;

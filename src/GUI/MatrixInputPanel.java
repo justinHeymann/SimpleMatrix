@@ -15,6 +15,8 @@ public class MatrixInputPanel extends JPanel {
         this.height = height;
         this.width = width;
 
+        this.setToolTipText("Use / to input fractions");
+
         this.setBorder(new LineBorder(Color.red, 3));
         GridLayout gridLayout = new GridLayout(height, width);
         gridLayout.setHgap(25);
@@ -27,7 +29,7 @@ public class MatrixInputPanel extends JPanel {
 
         textFields = new JTextField[height * width];
         for (int i = 0; i < height * width; i++){
-            JTextField temp = new JTextField(""+i,4);
+            JTextField temp = new JTextField("0",4);
             temp.setHorizontalAlignment(0);
             scrollGrid.add(temp);
             textFields[i] = temp;

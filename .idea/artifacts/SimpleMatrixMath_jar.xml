@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SimpleMatrixMath:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SimpleMatrixMath_jar</output-path>
+    <root id="archive" name="SimpleMatrixMath.jar">
+      <element id="module-output" name="SimpleMatrixMath" />
+    </root>
+  </artifact>
+</component>

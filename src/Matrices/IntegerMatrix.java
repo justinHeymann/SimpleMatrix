@@ -1,8 +1,8 @@
 package Matrices;
 
+import Exception.IllegalMatrixException;
 import MatrixMath.Multiplication.NumberMatrixMultiplicationStrategy;
 import MatrixMath.Multiplication.SimpleIntegerMatrixMultiplication;
-import Exception.IllegalMatrixException;
 
 import java.util.Arrays;
 import java.util.Random;

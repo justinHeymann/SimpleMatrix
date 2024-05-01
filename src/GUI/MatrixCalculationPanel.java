@@ -37,6 +37,7 @@ public class MatrixCalculationPanel extends JPanel implements ChangeListener {
         widthSpinner.addChangeListener(this);
 
         JButton gaussButton = new JButton("gauss elimination");
+
         gaussButton.addActionListener( a -> {
             RationalFractionMatrix fractionMatrix = new RationalFractionMatrix(inputPanel.getMatrixFromInput());
             fractionMatrix.gauss();
@@ -46,6 +47,7 @@ public class MatrixCalculationPanel extends JPanel implements ChangeListener {
             this.repaint();
 
         });
+        gaussButton.setToolTipText("This algorithm might not show you the simplest solution");
 
         JScrollPane scrollPane = new JScrollPane(solutionPanel);
         this.add(scrollPane, BorderLayout.CENTER);
